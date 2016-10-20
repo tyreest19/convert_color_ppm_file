@@ -8,7 +8,6 @@
 
 #ifndef PhotoFile_hpp
 #define PhotoFile_hpp
-#include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <string>
@@ -20,12 +19,18 @@ protected:
     struct Pixels {
         int r,g,b;
     };
-   fstream file; // stores the file
-    void show_array_value(Pixels array[],int number_of_pixels);
-    void store_pixels_in_array(Pixels *array,int number_of_pixels,string file_name);
-   int get_number_of_pixels(string file_name); // returns number of pixels
+    ifstream *infile;  // input file
+    ofstream *outfile; // output file location
+    int numPixels, width, height;
+    string headers[4];
+    Pixels* pixels;   // Store the pixels when constructed
+    
+    void parse_file();
+    void apply_grayscale();
+    
 public:
-     void grey_scale(string file_name); // edits the file in the file variable
+    PhotoFile(string infile, string outfile);
+    void grey_scale(); // edits the file in the file variable and writes to outfile
 };
 
 #endif /* PhotoFile_hpp */

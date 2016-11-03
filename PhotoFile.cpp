@@ -29,13 +29,12 @@ void PhotoFile::parse_file() {
     sizestream >> height;
     numPixels = width * height;
     pixels = new Pixels[numPixels];
-    //cout << "where the words coming from" << endl;
     string num1,num2,num3;
     for (int i = 0; i < numPixels; i++) {
         *infile >> num1 >> num2 >> num3;
         pixels[i].r = stoi(num1);
-        pixels[i].b = stoi(num2);
-        pixels[i].g = stoi(num3);
+        pixels[i].g = stoi(num2);
+        pixels[i].b = stoi(num3);
     }
     infile->close();
 }
@@ -55,10 +54,35 @@ void PhotoFile::apply_grayscale() {
     }
 }
 
+void PhotoFile:: apply_colorize() {
+    for (int i = 0; i < numPixels; i++){
+        if ( pixels[i].r >= 200 ) {
+            continue;
+        }
+        if ( pixels[i].r >= 150 ){
+            pixels[i].r = 255;
+            pixels[i].g = 0;
+            pixels[i].b = 0;
+        }
+        if ( pixels[i].r >= 100 ) {
+            pixels[i].r = 0;
+            pixels[i].g = 255;
+            pixels[i].b = 0;
+        }
+        if (pixels[i].r >= 50 ) {
+            pixels[i].r = 0;
+            pixels[i].g = 0;
+            pixels[i].b = 255;
+        }
+        pixels[i].r *= 0.3;
+        pixels[i].g *= 0.59;
+        pixels[i].b *= 0.11;
+        cout << pixels[i].r << " " <<pixels[i].b << " "<< pixels[i].g << endl;
+    }
+}
+
 void PhotoFile:: grey_scale() {
-    cout << "-----------------im reading the numbers in the file--------------" << endl;
     apply_grayscale();
-    
     *outfile << headers[0] << endl;
     *outfile << headers[1] << endl;
     *outfile << headers[2] << endl;
@@ -69,8 +93,17 @@ void PhotoFile:: grey_scale() {
     outfile->close();
 }
 
-
-
+void PhotoFile:: colorize() {
+    apply_colorize();
+    *outfile << headers[0] << endl;
+    *outfile << headers[1] << endl;
+    *outfile << headers[2] << endl;
+    *outfile << headers[3] << endl;
+    for (int i = 0; i < numPixels; i++) {
+        *outfile << pixels[i].r << " " << pixels[i].b << " " << pixels[i].g << endl;
+    }
+    outfile->close();
+}
 
 
 

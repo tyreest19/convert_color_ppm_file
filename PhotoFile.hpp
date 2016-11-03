@@ -24,13 +24,14 @@ protected:
     int numPixels, width, height;
     string headers[4];
     Pixels* pixels;   // Store the pixels when constructed
-    
+    void apply_colorize();
     void parse_file();
     void apply_grayscale();
     
 public:
     PhotoFile(string infile, string outfile);
     void grey_scale(); // edits the file in the file variable and writes to outfile
+    void colorize();
 };
 
 #endif /* PhotoFile_hpp */
